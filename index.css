@@ -1,0 +1,55 @@
+import { Bell, Search, ChevronDown, Menu } from 'lucide-react'
+
+const roleColors = {
+  student: 'bg-blue-500',
+  teacher: 'bg-green-500',
+  employer: 'bg-orange-500',
+  university: 'bg-slate-700',
+}
+
+const roleLabels = {
+  student: 'Student',
+  teacher: 'Teacher',
+  employer: 'Employer',
+  university: 'University',
+}
+
+export default function Header({ role, onMenuClick, onRoleChange }) {
+  return (
+    <div className="sticky top-0 z-50 bg-white border-b border-border px-4 py-3">
+      <div className="flex items-center justify-between">
+        <button onClick={onMenuClick} className="p-2 -ml-2">
+          <Menu className="w-6 h-6" />
+        </button>
+
+        <button
+          onClick={onRoleChange}
+          className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-lg"
+        >
+          <span className={`w-2 h-2 rounded-full ${roleColors[role]}`} />
+          <span className="text-sm">{roleLabels[role]}</span>
+          <ChevronDown className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center gap-2">
+          <button className="p-2 relative">
+            <Bell className="w-5 h-5" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <span className="text-white text-sm">JD</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3 relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <input
+          type="text"
+          placeholder="Search courses, jobs, students..."
+          className="w-full pl-10 pr-4 py-2 bg-input-background rounded-lg border-0 focus:ring-2 ring-ring/20"
+        />
+      </div>
+    </div>
+  )
+}

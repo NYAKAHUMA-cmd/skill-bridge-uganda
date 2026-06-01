@@ -1,0 +1,207 @@
+import { useState } from 'react'
+import { MapPin, DollarSign, Clock, TrendingUp, Users } from 'lucide-react'
+
+const jobs = [
+  {
+    id: 1,
+    company: 'Kampala Tech Solutions',
+    role: 'Junior IT Support Specialist',
+    location: 'Kampala',
+    salary: '800,000 - 1,200,000 UGX/month',
+    type: 'Full-time',
+    posted: '2 hours ago',
+    skills: ['CompTIA A+', 'Windows Server', 'Network Troubleshooting'],
+    logo: '💻',
+  },
+  {
+    id: 2,
+    company: 'MTN Uganda',
+    role: 'Network Technician',
+    location: 'Kampala',
+    salary: '1,500,000 - 2,000,000 UGX/month',
+    type: 'Full-time',
+    posted: '5 hours ago',
+    skills: ['CompTIA Network+', 'Cisco', 'Fiber Optics'],
+    logo: '📱',
+  },
+  {
+    id: 3,
+    company: 'Stanbic Bank Uganda',
+    role: 'IT Help Desk Officer',
+    location: 'Kampala',
+    salary: '1,000,000 - 1,500,000 UGX/month',
+    type: 'Full-time',
+    posted: '1 day ago',
+    skills: ['ICDL', 'Customer Service', 'Basic Networking'],
+    logo: '🏦',
+  },
+  {
+    id: 4,
+    company: 'Airtel Uganda',
+    role: 'Junior Cybersecurity Analyst',
+    location: 'Kampala',
+    salary: '1,800,000 - 2,500,000 UGX/month',
+    type: 'Full-time',
+    posted: '1 day ago',
+    skills: ['CompTIA Security+', 'Firewall Management', 'SIEM'],
+    logo: '🔒',
+  },
+  {
+    id: 5,
+    company: 'Uganda Revenue Authority',
+    role: 'Database Administrator',
+    location: 'Kampala',
+    salary: '2,000,000 - 3,000,000 UGX/month',
+    type: 'Full-time',
+    posted: '2 days ago',
+    skills: ['SQL', 'ICDL Advanced', 'Data Management'],
+    logo: '🏛️',
+  },
+  {
+    id: 6,
+    company: 'Entebbe International Airport',
+    role: 'IT Support Intern',
+    location: 'Entebbe',
+    salary: '400,000 - 600,000 UGX/month',
+    type: 'Internship',
+    posted: '3 days ago',
+    skills: ['ICDL Base', 'Hardware Maintenance'],
+    logo: '✈️',
+  },
+]
+
+const inDemandSkills = ['CompTIA A+', 'Network+', 'Cybersecurity', 'Cloud Computing', 'Data Analysis', 'ICDL']
+
+const filters = [
+  { id: 'all', label: 'All Jobs' },
+  { id: 'full-time', label: 'Full-time' },
+  { id: 'internship', label: 'Internships' },
+]
+
+export default function JobsFeed() {
+  const [activeFilter, setActiveFilter] = useState('all')
+  const [appliedJobs, setAppliedJobs] = useState([])
+
+  const filtered = activeFilter === 'all'
+    ? jobs
+    : jobs.filter((j) => j.type.toLowerCase() === activeFilter)
+
+  const handleApply = (jobId) => {
+    setAppliedJobs((prev) => [...prev, jobId])
+  }
+
+  return (
+    <div className="p-4 space-y-4 pb-24">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white">
+        <h2 className="text-xl mb-1">Job Market Feed</h2>
+        <p className="text-sm text-orange-100">Latest opportunities across Uganda</p>
+      </div>
+
+      {/* In-demand skills */}
+      <div className="bg-card rounded-xl border border-border p-4">
+        <h3 className="text-sm mb-3 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4" />
+          In-Demand Skills in Uganda (2026)
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {inDemandSkills.map((skill) => (
+            <span key={skill} className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-1">
+        {filters.map((f) => (
+          <button
+            key={f.id}
+            onClick={() => setActiveFilter(f.id)}
+            className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm transition-colors ${
+              activeFilter === f.id ? 'bg-orange-600 text-white' : 'bg-secondary text-foreground'
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Job cards */}
+      <div className="space-y-3">
+        {filtered.map((job) => {
+          const applied = appliedJobs.includes(job.id)
+          return (
+            <div key={job.id} className="bg-card rounded-xl border border-border p-4">
+              {/* Top row */}
+              <div className="flex gap-3 mb-3">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+                  {job.logo}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm mb-0.5">{job.role}</h4>
+                  <p className="text-sm text-muted-foreground">{job.company}</p>
+                </div>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full h-fit ${
+                    job.type === 'Full-time'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-blue-100 text-blue-700'
+                  }`}
+                >
+                  {job.type}
+                </span>
+              </div>
+
+              {/* Details */}
+              <div className="space-y-1.5 mb-3">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="w-4 h-4" />
+                  <span>{job.location}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <DollarSign className="w-4 h-4" />
+                  <span>{job.salary}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="w-4 h-4" />
+                  <span>Posted {job.posted}</span>
+                </div>
+              </div>
+
+              {/* Skills */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {job.skills.map((skill) => (
+                  <span key={skill} className="px-2 py-1 bg-secondary rounded text-xs">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+
+              {/* Apply button */}
+              <button
+                onClick={() => handleApply(job.id)}
+                disabled={applied}
+                className={`w-full py-2.5 rounded-lg transition-colors text-sm ${
+                  applied
+                    ? 'bg-green-100 text-green-700 cursor-default'
+                    : 'bg-orange-600 text-white hover:bg-orange-700'
+                }`}
+              >
+                {applied ? '✓ Applied' : 'Apply Now'}
+              </button>
+            </div>
+          )
+        })}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No jobs found for this filter.</p>
+        </div>
+      )}
+    </div>
+  )
+}
